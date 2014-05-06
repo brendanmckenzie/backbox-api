@@ -2,7 +2,6 @@
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace BackBox.Api.Controllers
@@ -50,27 +49,53 @@ namespace BackBox.Api.Controllers
         {
             Response.ContentType = "text/plain";
 
-            GetConnection().Execute("update [User] set [Radius] = @radius, [Location] = (@lat, @lng) where [Id] = @id", new { id = GetId(), radius = radius, lat = lat, lng = lng });
+            GetConnection().Execute(string.Format("update [User] set [Radius] = @radius, [Location] = geography::STGeomFromText('POINT({0} {1}', 4326) where [Id] = @id", lat, lng), new { id = GetId(), radius = radius });
 
             return string.Format("ok, i'll let you know about messages {2}km around ({0}, {1})", lat, lng, radius);
         }
 
-        public Guid Send(string message, double lat, double lng)
+        public Guid Send(double lat, double lng)
         {
             Response.ContentType = "text/plain";
 
             var id = Guid.NewGuid();
 
-            GetConnection().Execute("insert into [Message] ( [Id], [UserId], [Timestamp], [Content] ) values ( @id, @userId, getdate(), @content ) ", new { id, userId = GetId(), content = message });
+            var message = Request.Form["message"];
+
+            GetConnection().Execute(string.Format("insert into [Message] ( [Id], [UserId], [Timestamp], [Location], [Content] ) values ( @id, @userId, getdate(), geography::STGeomFromText('POINT({0} {1})', 4326), @content ) ", lng, lat), new { id, userId = GetId(), content = message });
 
             return id;
         }
 
         public string GetLatest()
         {
-            var user = GetConnection().Query<User>("select [Id], [Name], [Location] from [User] where [Id] = @id", new { id = GetId() }).First();
+            const string Sql = @"
+declare @location geography;
+declare @radius int;
 
-            var ret = GetConnection().Query<Message>("select [Id], [Timestamp], [Content] from [Message] where @timestamp is null or [Timestamp] > @timestamp", new { timestamp = Session["last_check"] });
+select
+    @location = [Location],
+    @radius = [Radius]
+from
+    [User]
+where
+    [Id] = @userId;
+
+select
+    M.[Id],
+    M.[Timestamp],
+    M.[Content],
+    M.[Location].Lat as [Lat],
+    M.[Location].Long as [Lng],
+    U.Name as [User]
+from
+    [Message] M
+    inner join [User] U on M.[UserId] = U.[Id] 
+where
+    (@timestamp is null or [Timestamp] > @timestamp)
+    and abs([Location].STDistance(@location)) < @radius";
+
+            var ret = GetConnection().Query<Message>(Sql, new { timestamp = Session["last_check"], userId = GetId() });
 
             Response.ContentType = "text/plain";
 
@@ -82,18 +107,14 @@ namespace BackBox.Api.Controllers
             return new HttpStatusCodeResult(418, "I'm a teapot.");
         }
 
-        public class User
-        {
-            public Guid Id { get; set; }
-            public string Name { get; set; }
-        }
-
         public class Message
         {
             public Guid Id { get; set; }
-            public User User { get; set; }
+            public string User { get; set; }
             public DateTime Timestamp { get; set; }
             public string Content { get; set; }
+            public double Lat { get; set; }
+            public double Lng { get; set; }
         }
     }
 }
