@@ -8,6 +8,12 @@ namespace BackBox.Api.Controllers
 {
     public class ApiController : Controller
     {
+        static Guid? testSessionId;
+        public static void TestOverrideSessionId(Guid id)
+        {
+            testSessionId = id;
+        }
+
         static SqlConnection GetConnection()
         {
             return new SqlConnection(ConfigurationManager.ConnectionStrings["Content"].ConnectionString);
@@ -15,6 +21,11 @@ namespace BackBox.Api.Controllers
 
         Guid GetId()
         {
+            if (testSessionId.HasValue)
+            {
+                return testSessionId.Value;
+            }
+
             if (Session["id"] == null) { throw new InvalidOperationException(); }
 
             return (Guid)Session["id"];
@@ -22,6 +33,11 @@ namespace BackBox.Api.Controllers
 
         public Guid Connect()
         {
+            if (testSessionId.HasValue)
+            {
+                return testSessionId.Value;
+            }
+
             if (Session["id"] == null)
             {
                 var id = Guid.NewGuid();
@@ -31,15 +47,11 @@ namespace BackBox.Api.Controllers
                 GetConnection().Execute("insert into [User] ( Id, Connected ) values ( @id, getdate() );", new { id = id });
             }
 
-            Response.ContentType = "text/plain";
-
             return (Guid)Session["id"];
         }
 
         public string SetName(string name)
         {
-            Response.ContentType = "text/plain";
-
             GetConnection().Execute("update [User] set [Name] = @name where [Id] = @id", new { id = GetId(), name = name });
 
             return "ok, " + name;
@@ -47,20 +59,14 @@ namespace BackBox.Api.Controllers
 
         public string SetBounds(double lat, double lng, int radius)
         {
-            Response.ContentType = "text/plain";
-
-            GetConnection().Execute(string.Format("update [User] set [Radius] = @radius, [Location] = geography::STGeomFromText('POINT({0} {1}', 4326) where [Id] = @id", lat, lng), new { id = GetId(), radius = radius });
+            GetConnection().Execute(string.Format("update [User] set [Radius] = @radius, [Location] = geography::STGeomFromText('POINT({0} {1})', 4326) where [Id] = @id", lat, lng), new { id = GetId(), radius = radius });
 
             return string.Format("ok, i'll let you know about messages {2}km around ({0}, {1})", lat, lng, radius);
         }
 
-        public Guid Send(double lat, double lng)
+        public Guid Send(double lat, double lng, string message)
         {
-            Response.ContentType = "text/plain";
-
             var id = Guid.NewGuid();
-
-            var message = Request.Form["message"];
 
             GetConnection().Execute(string.Format("insert into [Message] ( [Id], [UserId], [Timestamp], [Location], [Content] ) values ( @id, @userId, getdate(), geography::STGeomFromText('POINT({0} {1})', 4326), @content ) ", lng, lat), new { id, userId = GetId(), content = message });
 
@@ -96,8 +102,6 @@ where
     and abs([Location].STDistance(@location)) < @radius";
 
             var ret = GetConnection().Query<Message>(Sql, new { timestamp = Session["last_check"], userId = GetId() });
-
-            Response.ContentType = "text/plain";
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(ret);
         }

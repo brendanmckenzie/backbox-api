@@ -5,7 +5,9 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackBox.Api", "BackBox.Api\BackBox.Api.csproj", "{85FF171D-348C-4D29-833F-BE6D9FC17E3C}"
 EndProject
-sGlobal
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackBox.Api.Tests", "BackBox.Api.Tests\BackBox.Api.Tests.csproj", "{46F80747-05B1-4124-A4C7-F513406FE701}"
+EndProject
+Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
 		Ad-Hoc|iPhone = Ad-Hoc|iPhone
@@ -41,26 +43,22 @@ sGlobal
 		{85FF171D-348C-4D29-833F-BE6D9FC17E3C}.Release|iPhone.Build.0 = Release|Any CPU
 		{85FF171D-348C-4D29-833F-BE6D9FC17E3C}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{85FF171D-348C-4D29-833F-BE6D9FC17E3C}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Ad-Hoc|Any CPU.ActiveCfg = Ad-Hoc|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Ad-Hoc|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.AppStore|Any CPU.ActiveCfg = AppStore|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.AppStore|iPhone.Build.0 = AppStore|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.AppStore|iPhoneSimulator.ActiveCfg = AppStore|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Debug|Any CPU.ActiveCfg = Debug|iPhoneSimulator
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Debug|Any CPU.Build.0 = Debug|iPhoneSimulator
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Debug|iPhone.Build.0 = Debug|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Release|Any CPU.ActiveCfg = Release|iPhoneSimulator
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Release|Any CPU.Build.0 = Release|iPhoneSimulator
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Release|iPhone.ActiveCfg = Release|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Release|iPhone.Build.0 = Release|iPhone
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{05EC5DFA-F63B-42EB-9ED2-9551874D7D87}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Ad-Hoc|Any CPU.ActiveCfg = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Ad-Hoc|Any CPU.Build.0 = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Ad-Hoc|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.AppStore|Any CPU.ActiveCfg = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.AppStore|Any CPU.Build.0 = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.AppStore|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{46F80747-05B1-4124-A4C7-F513406FE701}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
