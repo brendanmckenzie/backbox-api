@@ -14,6 +14,12 @@ namespace BackBox.Api.Controllers
             testSessionId = id;
         }
 
+        static DateTime? testLastCheck;
+        public static void TestOverrideLastCheck(DateTime lastCheck)
+        {
+            testLastCheck = lastCheck;
+        }
+
         static SqlConnection GetConnection()
         {
             return new SqlConnection(ConfigurationManager.ConnectionStrings["Content"].ConnectionString);
@@ -35,6 +41,8 @@ namespace BackBox.Api.Controllers
         {
             if (testSessionId.HasValue)
             {
+                GetConnection().Execute("delete from [Message] where [UserId] = @id; delete from [User] where [Id] = @id; insert into [User] ( Id, Connected ) values ( @id, getdate() );", new { id = testSessionId.Value });
+
                 return testSessionId.Value;
             }
 
@@ -98,10 +106,10 @@ from
     [Message] M
     inner join [User] U on M.[UserId] = U.[Id] 
 where
-    (@timestamp is null or [Timestamp] > @timestamp)
-    and abs([Location].STDistance(@location)) < @radius";
+    (@timestamp is null or M.[Timestamp] > @timestamp)
+    and abs(M.[Location].STDistance(@location)) < @radius";
 
-            var ret = GetConnection().Query<Message>(Sql, new { timestamp = Session["last_check"], userId = GetId() });
+            var ret = GetConnection().Query<Message>(Sql, new { timestamp = testLastCheck ?? Session["last_check"], userId = GetId() });
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(ret);
         }
