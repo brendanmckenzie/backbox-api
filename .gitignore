@@ -174,3 +174,4 @@ UpgradeLog*.htm
 FakesAssemblies/
 
 PublishProfiles/
+.DS_Store
