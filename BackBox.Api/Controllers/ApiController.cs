@@ -67,7 +67,7 @@ namespace BackBox.Api.Controllers
 
         public string SetBounds(double lat, double lng, int radius)
         {
-            GetConnection().Execute(string.Format("update [User] set [Radius] = @radius, [Location] = geography::STGeomFromText('POINT({0} {1})', 4326) where [Id] = @id", lat, lng), new { id = GetId(), radius = radius });
+            GetConnection().Execute(string.Format("update [User] set [Radius] = @radius, [Location] = geography::STGeomFromText('POINT({1} {0})', 4326) where [Id] = @id", lat, lng), new { id = GetId(), radius = radius });
 
             return string.Format("ok, i'll let you know about messages {2}km around ({0}, {1})", lat, lng, radius);
         }
