@@ -8,6 +8,8 @@ namespace BackBox.Api.Controllers
 {
     public class ApiController : Controller
     {
+        static Random random = new Random();
+
         static Guid? testSessionId;
         public static void TestOverrideSessionId(Guid id)
         {
@@ -52,7 +54,9 @@ namespace BackBox.Api.Controllers
 
                 Session["id"] = id;
 
-                GetConnection().Execute("insert into [User] ( Id, Connected ) values ( @id, getdate() );", new { id = id });
+                var name = "Guest-" + random.Next(1000, 10000).ToString();
+
+                GetConnection().Execute("insert into [User] ( Id, Connected, [Name] ) values ( @id, getdate(), @name );", new { id = id, name = name });
             }
 
             return (Guid)Session["id"];
@@ -110,6 +114,8 @@ where
     and abs(M.[Location].STDistance(@location)) < @radius";
 
             var ret = GetConnection().Query<Message>(Sql, new { timestamp = testLastCheck ?? Session["last_check"], userId = GetId() });
+
+            Session["last_check"] = DateTime.Now;
 
             return Newtonsoft.Json.JsonConvert.SerializeObject(ret);
         }
