@@ -111,7 +111,9 @@ from
     inner join [User] U on M.[UserId] = U.[Id] 
 where
     (@timestamp is null or M.[Timestamp] > @timestamp)
-    and abs(M.[Location].STDistance(@location)) < @radius";
+    and abs(M.[Location].STDistance(@location)) < @radius
+order by
+    M.[Timestamp]";
 
             var ret = GetConnection().Query<Message>(Sql, new { timestamp = testLastCheck ?? Session["last_check"], userId = GetId() });
 
